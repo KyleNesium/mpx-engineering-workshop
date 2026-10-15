@@ -1,0 +1,33 @@
+{
+  "name": "jobmatch-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A local-first job marketplace workshop application for the Agentic Software Factory.",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "vite build",
+    "lint": "eslint .",
+    "serve": "NODE_ENV=production node server.js",
+    "test": "node --test test/*.test.js",
+    "check": "npm run lint && npm test && npm run build"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@vitejs/plugin-react": "^5.0.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.12.0",
+    "vite": "^7.0.0"
+  }
+}

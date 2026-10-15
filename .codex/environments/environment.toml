@@ -1,0 +1,21 @@
+# Shared Codex environment for local development and managed worktrees.
+version = 1
+name = "jobmatch-lab"
+
+[setup]
+script = "npm ci"
+
+[[actions]]
+name = "Run demo"
+icon = "run"
+command = "npm start"
+
+[[actions]]
+name = "Run tests"
+icon = "debug"
+command = "npm test"
+
+[[actions]]
+name = "Build frontend"
+icon = "debug"
+command = "npm run build"
