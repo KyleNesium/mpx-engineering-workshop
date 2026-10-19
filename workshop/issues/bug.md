@@ -1,5 +1,7 @@
 # BUG-001 - Deduplicate syndicated job listings
 
+<!-- jobmatch-workshop:BUG-001 -->
+
 The Senior Product Engineer role is present once in the direct feed and once in the partner feed. The UI shows both because `server/catalog.js` concatenates the sources without reconciling their shared `canonicalId`.
 
 Open `http://127.0.0.1:4175/incident` before changing the code. The page reads the live API response and shows both source records. Refresh it after the fix to verify the incident resolves.

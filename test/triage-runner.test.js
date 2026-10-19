@@ -1,9 +1,27 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
+
+test("runner skips both prepared exercises without credentials or API requests", () => {
+  const directory = mkdtempSync(join(tmpdir(), "jobmatch-workshop-skip-"));
+  try {
+    for (const file of ["issue.md", "bug.md"]) {
+      const body = readFileSync(new URL(`../workshop/issues/${file}`, import.meta.url), "utf8");
+      const eventPath = join(directory, "event.json");
+      writeFileSync(eventPath, JSON.stringify({ action: "opened", issue: { number: 1, state: "open", body } }));
+      const result = spawnSync(process.execPath, ["scripts/triage-issue.js"], {
+        cwd: new URL("..", import.meta.url), encoding: "utf8", timeout: 10000,
+        env: { GITHUB_EVENT_PATH: eventPath, GITHUB_EVENT_NAME: "issues" },
+      });
+      assert.equal(result.status, 0, result.stderr);
+      assert.match(result.stdout, /Triage skipped/);
+      assert.doesNotMatch(result.stdout, /Triage session:/);
+    }
+  } finally { rmSync(directory, { recursive: true }); }
+});
 
 test("runner creates a streamed session with input and publishes validated JSON without agent tool calls", () => {
   const directory = mkdtempSync(join(tmpdir(), "jobmatch-triage-test-"));

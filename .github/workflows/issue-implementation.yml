@@ -79,7 +79,7 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-  open_draft_pr:
+  open_pr:
     needs: validate_patch
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -99,7 +99,7 @@ jobs:
         with:
           name: validated-implementation
           path: ${{ runner.temp }}/implementation
-      - name: Create a source branch and draft PR with the runner
+      - name: Create a source branch and PR ready for review with the runner
         env:
           GITHUB_TOKEN: ${{ github.token }}
           FACTORY_ARTIFACT_DIR: ${{ runner.temp }}/implementation

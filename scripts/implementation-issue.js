@@ -119,7 +119,7 @@ if (mode === "generate") {
   await writeFile(metadataPath, JSON.stringify(metadata, null, 2));
   await job.update({ state: "patch_ready", session_id: sessionId, turn_id: turnId, patch_sha: digest(await readFile(patchPath)), manifest_sha: digest(await readFile(manifestPath)) });
   await setOutput("has_patch", "true");
-  await summary(`## Implementation patch received\n\n- Issue: #${number}\n- Agent: ${agentId}\n- Session: ${sessionId}\n- The validation job must pass before a draft PR is published.`);
+  await summary(`## Implementation patch received\n\n- Issue: #${number}\n- Agent: ${agentId}\n- Session: ${sessionId}\n- The validation job must pass before a PR ready for review is published.`);
 } else {
   const metadata = JSON.parse(await readFile(metadataPath, "utf8"));
   const manifest = JSON.parse(await readFile(manifestPath, "utf8"));

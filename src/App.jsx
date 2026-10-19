@@ -163,7 +163,7 @@ function WorkshopPanel() {
   const cards = [
     { step: "01", icon: "git", label: "BUILD", title: "Parallel development", body: "Work through scoped engineering tasks in separate Codex worktrees, then bring the results together.", detail: "Hands-on implementation" },
     { step: "02", icon: "shield", label: "SECURE", title: "Investigate the scan", body: "Run Codex Security Cloud against your demo repository and review a finding before opening a fix PR.", detail: "Seeded synthetic profile data" },
-    { step: "03", icon: "sparkles", label: "AUTOMATE", title: "Build the factory", body: "Use an approved issue to implement a small change and open a draft PR for review.", detail: "Task 8" },
+    { step: "03", icon: "sparkles", label: "AUTOMATE", title: "Build the factory", body: "Use an approved issue to implement a small change and open a PR ready for review.", detail: "Task 9" },
   ];
 
   return (

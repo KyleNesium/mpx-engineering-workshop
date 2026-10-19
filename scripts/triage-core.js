@@ -79,9 +79,13 @@ export function renderQuestions(args, status, sessionId) {
     `Session: \`${sessionId}\``, `<!-- revision:${args.revision} -->`].join("\n\n");
 }
 
+function isLocalWorkshopExercise(issue) {
+  return /<!-- jobmatch-workshop:(?:ISSUE-001|BUG-001) -->/.test(issue.body || "");
+}
+
 export function shouldRun(eventName, event) {
   if (eventName === "workflow_dispatch") return /^\d+$/.test(String(event.inputs?.issue_number || ""));
-  if (!event.issue || event.issue.pull_request || event.issue.state !== "open") return false;
+  if (!event.issue || event.issue.pull_request || event.issue.state !== "open" || isLocalWorkshopExercise(event.issue)) return false;
   if (eventName === "issues") return event.action === "opened";
   return eventName === "issue_comment" && event.action === "created" && event.comment?.user?.type !== "Bot" && event.comment?.user?.login !== BOT;
 }
@@ -91,6 +95,8 @@ export function createRefinementPublisher({ github, issueNumber, context, sessio
   async function snapshot() {
     const issue = await github("GET", `/issues/${issueNumber}`);
     if (issue.pull_request || issue.state !== "open") throw new Error("Only the triggering open issue can be refined.");
+    // Also enforce this on manual workflow_dispatch runs, before creating an API session.
+    if (isLocalWorkshopExercise(issue)) throw new Error("Local workshop exercises are excluded from automated refinement.");
     if (issue.labels.some(l => l.name === "triage-disabled")) throw new Error("Triage is disabled for this issue.");
     const comments = [];
     for (let page = 1; page <= 20; page++) {

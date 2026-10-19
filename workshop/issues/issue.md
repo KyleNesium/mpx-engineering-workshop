@@ -1,5 +1,7 @@
 # ISSUE-001 - Recognize related skills in match scores
 
+<!-- jobmatch-workshop:ISSUE-001 -->
+
 The current match engine recognizes exact text matches only. It misses useful relationships such as React being a more specific frontend-development skill. The small example hierarchy in `server/skills.js` is available but unused.
 
 ## Acceptance criteria

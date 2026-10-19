@@ -54,7 +54,7 @@ test("patch gate accepts app changes and rejects automation paths, traversal and
   } finally { await rm(cwd, { recursive: true }); }
 });
 
-test("publisher rechecks approval and creates one draft PR from the staged patch", async () => {
+test("publisher rechecks approval and creates one PR ready for review from the staged patch", async () => {
   const { cwd, base } = await repository();
   try {
     await writeFile(join(cwd, "src/app.js"), "export const theme = 'dark';\n");
@@ -85,13 +85,16 @@ test("publisher rechecks approval and creates one draft PR from the staged patch
     await assert.rejects(publishPR(args), /Default branch changed/);
     currentBase = base;
     const pr = await publishPR(args);
-    assert.equal(pr.draft, true);
+    assert.equal(pr.draft, false);
     assert.equal(pr.head, "factory/issue-1");
     assert.match(pr.body, /Closes #1/);
     assert.match(pr.body, /npm run check/);
     const count = writes.length;
     assert.equal((await publishPR(args)).html_url, pr.html_url);
     assert.equal(writes.length, count);
+    previous = { ...previous, draft: true };
+    assert.equal((await publishPR(args)).draft, true);
+    assert.equal(writes.length, count, "An existing draft is reused for the participant's GitHub Ready for review step.");
     assert.equal(writes.some(w => w.path.includes("merge")), false);
   } finally { await rm(cwd, { recursive: true }); }
 });

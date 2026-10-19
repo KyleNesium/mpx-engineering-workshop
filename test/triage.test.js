@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { shouldRun, splitBody, revision, validateSpecification, createRefinementPublisher, refinementInstructions, START, END, BOT } from "../scripts/triage-core.js";
 import { consumeEvents, rootCompleted, failed } from "../scripts/agent-events.js";
+import { readFileSync } from "node:fs";
 
 test("refinement uses only the marked prompt and refuses ambiguous or damaged workbook content", () => {
   const block = "<!-- jobmatch-refinement-instructions:start -->\n```text\nRefine the triggering issue.\n```\n<!-- jobmatch-refinement-instructions:end -->";
@@ -40,6 +41,25 @@ test("triage triggers for new issues and human comments, never PRs or bot replie
   assert.equal(shouldRun("issue_comment", { issue, action: "created", comment: { user: { type: "Bot", login: BOT } } }), false);
   assert.equal(shouldRun("issue_comment", { issue: { ...issue, pull_request: {} }, action: "created", comment: { user: { type: "User" } } }), false);
 });
+for (const file of ["issue.md", "bug.md"]) {
+  const body = readFileSync(new URL(`../workshop/issues/${file}`, import.meta.url), "utf8");
+  test(`the ${file} exercise skips automatic refinement on creation and human replies`, () => {
+    for (const description of [body, body.replaceAll("\n", "\r\n")]) {
+      const issue = { number: 1, state: "open", body: description };
+      assert.equal(shouldRun("issues", { issue, action: "opened" }), false);
+      assert.equal(shouldRun("issue_comment", { issue, action: "created", comment: { user: { type: "User", login: "participant" } } }), false);
+    }
+  });
+  test(`manual refinement cannot read comments or publish changes to the ${file} exercise`, async () => {
+    const f = fixture();
+    f.issue.body = body;
+    await assert.rejects(f.gateway.read(), /Local workshop exercises are excluded/);
+    await assert.rejects(f.gateway.publish(spec("a".repeat(64))), /Local workshop exercises are excluded/);
+    assert.ok(f.calls.every(c => c.method === "GET" && c.path === "/issues/1"));
+    assert.equal(f.comments.length, 0);
+    assert.equal(f.issue.body, body);
+  });
+}
 test("blocking questions prevent readiness; malformed output cannot publish", () => {
   const args = spec("a".repeat(64));
   args.questions = [{ question: "Should hybrid roles count?", blocking: true }];

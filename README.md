@@ -19,6 +19,12 @@ The workshop-only diagnostic pages and their direct links are in [WORKBOOK.md](W
 
 Use one local preview on **4175**. Stop the current server before running `npm start` in a different checkout or worktree. To verify the project, run `npm run check`. The check runs lint, tests, and a production frontend build. `npm run serve` serves the built `dist/` directory.
 
+## Workshop issue setup
+
+After forking and completing the preparation in [WORKBOOK.md](WORKBOOK.md#before-you-begin), connect your GitHub account in Codex and use the **Task 0 setup prompt**. Codex reads [issue.md](workshop/issues/issue.md) and [bug.md](workshop/issues/bug.md), creates missing issues in your fork, and returns their verified links. No setup script or GitHub CLI is required. Inspect both issues yourself before continuing; Tasks 1-3 use their GitHub descriptions as requirements.
+
+The template markers identify these local workshop exercises and exclude them from automated issue refinement in Tasks 8-9. Keep the markers when creating the issues. Repeating the setup prompt reuses existing issues without reopening or overwriting them.
+
 ## Explore the application
 
 - **Overview:** fictional listing and candidate metrics plus ranked job matches.
@@ -44,11 +50,11 @@ The P1 incident is a separate match-integrity exercise. Start from its diagnosti
 | `server/candidates.js` | Public summaries and full candidate records |
 | `src/App.jsx` | React marketplace and match-insights interface |
 | `test/` | Baseline unit and API tests |
-| `workshop/issues/` | Ready-to-create GitHub issue descriptions |
-| `.github/workflows/issue-implementation.yml` | Approved-issue implementation and draft PR workflow |
+| `workshop/issues/issue.md`, `workshop/issues/bug.md` | Templates for the two GitHub issues created by the Task 0 prompt |
+| `.github/workflows/issue-implementation.yml` | Approved-issue implementation and PR ready for review workflow |
 | `workshop/agents/issue-implementation.md` | Implementation agent instructions |
-| `WORKBOOK.md` | Participant guide, embedded exercises, and refinement instructions |
-| `.agents/skills/` | Incident investigation, code review, and factory verification skills |
+| `WORKBOOK.md` | Participant guide, issue-setup prompt, and refinement instructions |
+| `.agents/skills/` | One evidence-first incident-investigation skill for Task 3A |
 | `.codex/environments/environment.toml` | Codex worktree setup and quick actions |
 | `AGENTS.md` | Repository and code-review guidance |
 

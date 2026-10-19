@@ -111,7 +111,7 @@ export async function publishPR({ github, repository, number, baseBranch, metada
   // Create, never force-update: an existing branch is kept for human inspection.
   await github("POST", "/git/refs", { ref: `refs/heads/${branch}`, sha: createdCommit.sha });
   return github("POST", "/pulls", {
-    title: `Implement issue #${number}: ${snapshot.issue.title.slice(0, 150)}`, base: baseBranch, head: branch, draft: true,
+    title: `Implement issue #${number}: ${snapshot.issue.title.slice(0, 150)}`, base: baseBranch, head: branch, draft: false,
     body: `Closes #${number}\n\n${manifest.summary}\n\n### Validation\n\n- Runner: \`npm run check\` passed (lint, tests, build).\n- Base commit: \`${metadata.base_sha}\`\n- Agent: \`${metadata.agent_id}\`\n- Session: \`${metadata.session_id}\`\n\nReview the implementation, CI checks, and Codex review before merging.`,
   });
 }

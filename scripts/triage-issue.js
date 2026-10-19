@@ -5,7 +5,7 @@ import { consumeEvents, rootCompleted, failed } from "./agent-events.js";
 import { reserveJob, requireKnownOutcome, hash } from "./automation-state.js";
 
 const event = JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH, "utf8"));
-if (!shouldRun(process.env.GITHUB_EVENT_NAME, event)) { console.log("Triage skipped: not a new open issue or human reply."); process.exit(0); }
+if (!shouldRun(process.env.GITHUB_EVENT_NAME, event)) { console.log("Triage skipped: event is ineligible or the issue is a local workshop exercise."); process.exit(0); }
 const issueNumber = Number(event.issue?.number || event.inputs?.issue_number);
 const repository = process.env.GITHUB_REPOSITORY;
 const agentId = process.env.TRIAGE_AGENT_ID;
