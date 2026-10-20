@@ -15,6 +15,10 @@ npm start
 
 Open [http://127.0.0.1:4175](http://127.0.0.1:4175). The API is served by the same process. Check readiness with `curl -fsS http://127.0.0.1:4175/api/health`.
 
+## Open the workshop
+
+Access the workshop directly at [JobMatch Lab Workshop](https://jobmatch-lab-workshop.openai.chatgpt.site/).
+
 The workshop-only diagnostic pages and their direct links are in [WORKBOOK.md](WORKBOOK.md). Restart the Node server after a server-side fix, then refresh the relevant page.
 
 Use one local preview on **4175**. Stop the current server before running `npm start` in a different checkout or worktree. To verify the project, run `npm run check`. The check runs lint, tests, and a production frontend build. `npm run serve` serves the built `dist/` directory.
