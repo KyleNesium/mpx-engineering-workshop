@@ -201,13 +201,14 @@ function Inspector({ candidate, candidates, selectedCandidateId, onCandidateChan
       {selectedJob && <div className="inspector-card match-inspector">
         <div className="inspector-card-kicker">SELECTED ROLE</div>
         <div className="selected-role-title"><strong>{selectedJob.title}</strong><span>{selectedJob.company}</span></div>
-        <div className="large-score-row"><ScoreRing score={selectedJob.match.score} /><div><strong>{selectedJob.match.matchedCount} of {selectedJob.match.requiredCount}</strong><span>skills matched exactly</span></div></div>
+        <div className="large-score-row"><ScoreRing score={selectedJob.match.score} /><div><strong>{selectedJob.match.matchedCount} exact · {selectedJob.match.relatedCount} related</strong><span>of {selectedJob.match.requiredCount} required skills</span></div></div>
         <div className="inspector-divider" />
         <div className="breakdown-title">Why this match?</div>
         <div className="skill-breakdown">{selectedJob.match.skillBreakdown.map((item) => (
-          <div key={item.skill}><span className={item.matched ? "breakdown-icon matched" : "breakdown-icon"}>{item.matched ? <Icon name="check" size={13} /> : "·"}</span><span>{item.skill}</span><small>{item.reason}</small></div>
+          <div key={item.skill}><span className={`breakdown-icon ${item.matchType}`}>{item.matched ? <Icon name="check" size={13} /> : item.matchType === "related" ? "½" : "·"}</span><span>{item.skill}</span><small>{item.reason} · {Number(item.points.toFixed(2))} pts</small></div>
         ))}</div>
-        <div className="location-fit"><Icon name="map" size={15} /><span>{selectedJob.match.locationFits ? "Location works for this candidate" : "Location may need discussion"}</span></div>
+        <div className="location-fit"><Icon name="map" size={15} /><span>{selectedJob.match.locationFits ? "Location works for this candidate" : "Location may need discussion"} · {selectedJob.match.locationScore} pts</span></div>
+        <p className="inspector-footnote">Skills contribute up to 80 points, location up to 20. The total is rounded.</p>
       </div>}
 
       <div className="inspector-note"><Icon name="chart" size={17} /><span>Top match in this profile: <strong>{topScore}%</strong></span></div>
